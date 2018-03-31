@@ -12,7 +12,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
 <link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="my-icons.html">
 
 <dom-module id="my-view1">
   <template>
@@ -23,7 +25,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         padding: 10px;
       }
       paper-checkbox {
-        padding: 16px;
+        margin: 16px 32px;
+        width: 100%;
+      }
+      paper-icon-button {
+        color: inherit;
+      }
+      app-toolbar {
+        border-radius: 5px 5px 0px 0px;
+        background-color: var(--app-primary-color);
+        color: white;
+      }
+      #count {
+        margin-right: 16px;
+      }
+      paper-checkbox {
+        --paper-checkbox-checked-color: var(--app-secondary-color);
+      }
+      @media(min-width: 900px) {
+        
+        app-toolbar {
+          grid-column: 1 / 3;
+        }
+        .card {
+          margin: 32px auto;
+          max-width: 900px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
       }
     </style>
     
@@ -34,10 +63,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div main-title>United States</div>
         <div spacer></div>
         <div id='count'>[[checkCount]] of 50</div>
+        
+        <paper-icon-button icon="my-icons:reset" on-tap='_clearChecked'></paper-icon-button>
+
       </app-toolbar>
       <template is="dom-repeat" items='{{states}}'>
         <paper-checkbox checked='{{item.checked}}'>[[item.state]]</paper-checkbox>
-        <br/>
       </template>
     </div>
   </template>
@@ -60,16 +91,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   { abbrev: "AK", state: "Alaska", checked: false },
                   { abbrev: "AL", state: "Alabama", checked: false  },
                   { abbrev: "AR", state: "Arkansas", checked: false  },
-                  { abbrev: "AS", state: "American Samoa", checked: false  },
+                  // { abbrev: "AS", state: "American Samoa", checked: false  },
                   { abbrev: "AZ", state: "Arizona", checked: false  },
                   { abbrev: "CA", state: "California", checked: false },
                   { abbrev: "CO", state: "Colorado", checked: false  },
                   { abbrev: "CT", state: "Connecticut", checked: false  },
-                  { abbrev: "DC", state: "District of Columbia", checked: false  },
+                  // { abbrev: "DC", state: "District of Columbia", checked: false  },
                   { abbrev: "DE", state: "Delaware", checked: false  },
                   { abbrev: "FL", state: "Florida", checked: false  },
                   { abbrev: "GA", state: "Georgia", checked: false  },
-                  { abbrev: "GU", state: "Guam", checked: false  },
+                  // { abbrev: "GU", state: "Guam", checked: false  },
                   { abbrev: "HI", state: "Hawaii", checked: false  },
                   { abbrev: "IA", state: "Iowa", checked: false  },
                   { abbrev: "ID", state: "Idaho", checked: false  },
@@ -98,7 +129,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   { abbrev: "OK", state: "Oklahoma", checked: false  },
                   { abbrev: "OR", state: "Oregon", checked: false  },
                   { abbrev: "PA", state: "Pennsylvania", checked: false  },
-                  { abbrev: "PR", state: "Puerto Rico", checked: false  },
+                  // { abbrev: "PR", state: "Puerto Rico", checked: false  },
                   { abbrev: "RI", state: "Rhode Island", checked: false  },
                   { abbrev: "SC", state: "South Carolina", checked: false  },
                   { abbrev: "SD", state: "South Dakota", checked: false  },
@@ -106,7 +137,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   { abbrev: "TX", state: "Texas", checked: false  },
                   { abbrev: "UT", state: "Utah", checked: false  },
                   { abbrev: "VA", state: "Virginia", checked: false  },
-                  { abbrev: "VI", state: "Virgin Islands", checked: false  },
+                  // { abbrev: "VI", state: "Virgin Islands", checked: false  },
                   { abbrev: "VT", state: "Vermont", checked: false  },
                   { abbrev: "WA", state: "Washington", checked: false  },
                   { abbrev: "WI", state: "Wisconsin", checked: false  },
@@ -120,15 +151,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       static get observers() {
         return [
           '_calcCheckCount(states.*)'
-        ]
+        ];
       }
       _calcCheckCount() {
-        let count = this.states.reduce((count, state) => {
-          console.log(state.checked, count);
+        this.checkCount = this.states.reduce((count, state) => {
           return count + (state.checked ? 1 : 0);
         }, 0);
-        console.log(count);
-        this.set('checkCount', count);
+      }
+      _clearChecked() {
+        console.log('clear')
+        this.states = this.states.map(state => Object.assign({}, state, {checked: false}));
       }
     }
 

@@ -31,8 +31,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <style>
       :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
+        --app-primary-color: #009688;
+        --app-dark-color: #00796B;
+        --app-secondary-color: #7C4DFF;
+        
+        --text-color: #212121;
+        --text-secondary-color: #757575
 
         display: block;
       }
@@ -58,12 +62,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: block;
         padding: 0 16px;
         text-decoration: none;
-        color: var(--app-secondary-color);
+        color: var(--text-secondary-color);
         line-height: 40px;
       }
 
       .drawer-list a.iron-selected {
-        color: black;
+        color: var(--app-dark-color);
         font-weight: bold;
       }
     </style>
@@ -80,10 +84,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}">
     </app-route>
 
-    <app-drawer-layout fullbleed narrow="{{narrow}}">
+    <app-drawer-layout fullbleed narrow="{{narrow}}" force-narrow>
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-        <app-toolbar>Menu</app-toolbar>
+        <app-toolbar>Games</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="view1" href="[[rootPath]]view1">License Plates</a>
           <a name="view2" href="[[rootPath]]view2">I Spy...</a>
@@ -96,7 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>Driving Games</div>
+            <div main-title>[[pageTitle]]</div>
           </app-toolbar>
         </app-header>
 
@@ -128,6 +132,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             reflectToAttribute: true,
             observer: '_pageChanged',
           },
+          pageTitle: {
+            type: String,
+            computed: '_pageTitle(page)'
+          },
           routeData: Object,
           subroute: Object,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
@@ -136,6 +144,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         };
       }
 
+      _pageTitle(page) {
+        switch(page) {
+          case 'view1':
+            return "License Plate";
+          case 'view2':
+            return "I Spy...";
+        }
+      }
       static get observers() {
         return [
           '_routePageChanged(routeData.page)',
