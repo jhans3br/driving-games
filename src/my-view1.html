@@ -1,0 +1,137 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view1">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      paper-checkbox {
+        padding: 16px;
+      }
+    </style>
+    
+    <app-localstorage-document key="states" data="{{states}}"></app-localstorage-document>
+    
+    <div class="card">
+      <app-toolbar>
+        <div main-title>United States</div>
+        <div spacer></div>
+        <div id='count'>[[checkCount]] of 50</div>
+      </app-toolbar>
+      <template is="dom-repeat" items='{{states}}'>
+        <paper-checkbox checked='{{item.checked}}'>[[item.state]]</paper-checkbox>
+        <br/>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    /*global Polymer*/
+    class MyView1 extends Polymer.Element {
+      static get is() { return 'my-view1'; }
+      
+      static get properties() {
+        return {
+          checkCount: {
+            type: Number,
+            value: 0,
+          },
+          states: {
+            type: Array,
+            value: function() {
+               return [
+                  { abbrev: "AK", state: "Alaska", checked: false },
+                  { abbrev: "AL", state: "Alabama", checked: false  },
+                  { abbrev: "AR", state: "Arkansas", checked: false  },
+                  { abbrev: "AS", state: "American Samoa", checked: false  },
+                  { abbrev: "AZ", state: "Arizona", checked: false  },
+                  { abbrev: "CA", state: "California", checked: false },
+                  { abbrev: "CO", state: "Colorado", checked: false  },
+                  { abbrev: "CT", state: "Connecticut", checked: false  },
+                  { abbrev: "DC", state: "District of Columbia", checked: false  },
+                  { abbrev: "DE", state: "Delaware", checked: false  },
+                  { abbrev: "FL", state: "Florida", checked: false  },
+                  { abbrev: "GA", state: "Georgia", checked: false  },
+                  { abbrev: "GU", state: "Guam", checked: false  },
+                  { abbrev: "HI", state: "Hawaii", checked: false  },
+                  { abbrev: "IA", state: "Iowa", checked: false  },
+                  { abbrev: "ID", state: "Idaho", checked: false  },
+                  { abbrev: "IL", state: "Illinois", checked: false  },
+                  { abbrev: "IN", state: "Indiana", checked: false  },
+                  { abbrev: "KS", state: "Kansas", checked: false  },
+                  { abbrev: "KY", state: "Kentucky", checked: false  },
+                  { abbrev: "LA", state: "Louisiana", checked: false  },
+                  { abbrev: "MA", state: "Massachusetts", checked: false  },
+                  { abbrev: "MD", state: "Maryland", checked: false  },
+                  { abbrev: "ME", state: "Maine", checked: false  },
+                  { abbrev: "MI", state: "Michigan", checked: false  },
+                  { abbrev: "MN", state: "Minnesota", checked: false  },
+                  { abbrev: "MO", state: "Missouri", checked: false  },
+                  { abbrev: "MS", state: "Mississippi", checked: false  },
+                  { abbrev: "MT", state: "Montana", checked: false  },
+                  { abbrev: "NC", state: "North Carolina", checked: false  },
+                  { abbrev: "ND", state: "North Dakota", checked: false  },
+                  { abbrev: "NE", state: "Nebraska", checked: false  },
+                  { abbrev: "NH", state: "New Hampshire", checked: false  },
+                  { abbrev: "NJ", state: "New Jersey", checked: false  },
+                  { abbrev: "NM", state: "New Mexico", checked: false  },
+                  { abbrev: "NV", state: "Nevada", checked: false  },
+                  { abbrev: "NY", state: "New York", checked: false  },
+                  { abbrev: "OH", state: "Ohio", checked: false  },
+                  { abbrev: "OK", state: "Oklahoma", checked: false  },
+                  { abbrev: "OR", state: "Oregon", checked: false  },
+                  { abbrev: "PA", state: "Pennsylvania", checked: false  },
+                  { abbrev: "PR", state: "Puerto Rico", checked: false  },
+                  { abbrev: "RI", state: "Rhode Island", checked: false  },
+                  { abbrev: "SC", state: "South Carolina", checked: false  },
+                  { abbrev: "SD", state: "South Dakota", checked: false  },
+                  { abbrev: "TN", state: "Tennessee", checked: false  },
+                  { abbrev: "TX", state: "Texas", checked: false  },
+                  { abbrev: "UT", state: "Utah", checked: false  },
+                  { abbrev: "VA", state: "Virginia", checked: false  },
+                  { abbrev: "VI", state: "Virgin Islands", checked: false  },
+                  { abbrev: "VT", state: "Vermont", checked: false  },
+                  { abbrev: "WA", state: "Washington", checked: false  },
+                  { abbrev: "WI", state: "Wisconsin", checked: false  },
+                  { abbrev: "WV", state: "West Virginia", checked: false  },
+                  { abbrev: "WY", state: "Wyoming", checked: false  }
+                  ]
+            }
+          }
+        };
+      }
+      static get observers() {
+        return [
+          '_calcCheckCount(states.*)'
+        ]
+      }
+      _calcCheckCount() {
+        let count = this.states.reduce((count, state) => {
+          console.log(state.checked, count);
+          return count + (state.checked ? 1 : 0);
+        }, 0);
+        console.log(count);
+        this.set('checkCount', count);
+      }
+    }
+
+    window.customElements.define(MyView1.is, MyView1);
+  </script>
+</dom-module>
